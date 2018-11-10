@@ -34,6 +34,10 @@ class ViewController: UIViewController   {
                 let ciContext = CIContext()
                 let cgImage = ciContext.createCGImage(faceImage!, from: faceImage!.extent)
                 self.testImage.image = UIImage.init(cgImage: cgImage!)
+                let copyImage = self.testImage.image
+                let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
+                let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
+                print(strBase64)
             }
         }
     }
