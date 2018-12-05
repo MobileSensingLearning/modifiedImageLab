@@ -18,11 +18,15 @@
 
 
 // set the image for processing later
--(CIImage*) setImage:(CIImage*)ciFrameImage
-      withBounds:(CGRect)rect
-      andContext:(CIContext*)context;
+-(void) setImage:(CIImage*)ciFrameImage
+withBounds:(CGRect)rect
+andContext:(CIContext*)context;
 
-//get the image raw opencv
+// capture the iamge
+-(CIImage*) captureImage:(CIImage*)ciFrameImage
+    withBounds:(CGRect)rect
+    andContext:(CIContext*)context;//get the image raw opencv
+
 -(CIImage*)getImage;
 
 //get the image inside the original bounds
