@@ -23,8 +23,37 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     var detector:CIDetector! = nil
     let bridge = OpenCVBridge()
     var fGlobal:[CIFaceFeature] = [];
-    var retImageGlobal:CIImage = CIImage()
-    let SERVER_URL = "http://169.254.14.193:8000"
+    var retImage:CIImage = CIImage()
+    let SERVER_URL = "http://169.254.127.209:8000"
+    
+    func makeModel2() {
+        // create a GET request for server to update the ML model with current data
+        let baseURL = "\(SERVER_URL)/UpdateModel"
+        let query = "?dsid=1&modelName=0"
+        
+        let getUrl = URL(string: baseURL+query)
+        let request: URLRequest = URLRequest(url: getUrl!)
+        let dataTask : URLSessionDataTask = self.session.dataTask(with: request,
+                                                                  completionHandler:{(data, response, error) in
+                                                                    // handle error!
+                                                                    if (error != nil) {
+                                                                        if let res = response{
+                                                                            print("Response:\n",res)
+                                                                        }
+                                                                    }
+                                                                    else{
+                                                                        let jsonDictionary = self.convertDataToDictionary(with: data)
+                                                                        
+                                                                        if let resubAcc = jsonDictionary["resubAccuracy"]{
+                                                                            print("Resubstitution Accuracy is", resubAcc)
+                                                                        }
+                                                                    }
+                                                                    
+        })
+        
+        dataTask.resume() // start the task
+    }
+    
     
     func convertDictionaryToData(with jsonUpload:NSDictionary) -> Data?{
         do { // try to make JSON and deal with errors using do/catch block
@@ -153,8 +182,9 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     
     
-    
-    @objc func buttonAction(sender: UIButton!) {
+    // this function should call the server
+    // and get an emotion & skin tone prediction
+    @objc func  buttonAction(sender: UIButton!) {
         
         print("title:", sender.currentTitle!)
         let i = Int(sender.currentTitle!)
@@ -168,50 +198,59 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 let copyImage = self.testImage.image
                 let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
                 let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
-                //self.sendFeatures([self.base64string],withLabel:"Hi")
+                
+                
+                self.sendFeatures([self.base64string],withLabel:"Hi")
+            
                 self.getPrediction([strBase64])
+                
+                self.makeModel2()
             }
         }
     }
     
+    func makeButtons(i:Int, bounds:CGRect) {
+        let button = UIButton(frame: CGRect(x: bounds.minX, y: bounds.minY,
+                                            width: bounds.width/2, height: bounds.height/2))
+        button.backgroundColor = .green
+        button.setTitle(String(i), for: .normal)
+        button.addTarget(self, action: #selector(buttonAction), for: UIControlEvents.touchUpInside)
+        self.view.addSubview(button)
+    }
+    
+    // this function should stop the videoManager
+    // and have buttons appear so that user can
+    // press & see predictions
     @IBAction func actuallyCapture(_ sender: Any) {
         self.bridge.setTransforms(self.videoManager.transform)
-        for (i, face) in fGlobal.enumerated() {
-            print("type:", type(of:i))
-            let button = UIButton(frame: CGRect(
-            x: face.bounds.minX, y: face.bounds.minY, width: face.bounds.width/2, height: face.bounds.height/2
-            ))
-            button.backgroundColor = .green
-            button.setTitle(String(i), for: .normal)
-            button.addTarget(self, action: #selector(buttonAction), for: UIControlEvents.touchUpInside)
-            self.view.addSubview(button)
-            print("creating faceImage")
-            let img = self.bridge.getImageComposite()
-            self.bridge.setImage(img, withBounds: face.bounds, andContext: self.videoManager.getCIContext())
-            self.bridge.processImage()
-            let faceImage = self.bridge.getImageComposite()
+        for (i, face) in self.fGlobal.enumerated() {
+
+            makeButtons(i: i, bounds: face.bounds);
+
+            // Making photo appear in box
+            let faceImage = self.bridge.capture(self.retImage, withBounds: face.bounds, // the first face bounds
+                andContext: self.videoManager.getCIContext())
+            
+            if(faceImage != nil) {
+                print("face image is not null")
+                
+                DispatchQueue.main.async {
+                    let ciContext = CIContext()
+                    let cgImage = ciContext.createCGImage(faceImage!, from: faceImage!.extent)
+                    self.testImage.image = UIImage.init(cgImage: cgImage!)
+                    let copyImage = self.testImage.image
+                    let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
+                    let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
+                    print(strBase64)
+                }
+            }
+            
             self.faceImages.append(faceImage!)
         }
-        
-        self.videoManager.stop()
 
-        
-        
-//
-//
-//        if(faceImage != nil) {
-//            print("face image is not null")
-//
-//            DispatchQueue.main.async {
-//                let ciContext = CIContext()
-//                let cgImage = ciContext.createCGImage(faceImage!, from: faceImage!.extent)
-//                self.testImage.image = UIImage.init(cgImage: cgImage!)
-//                let copyImage = self.testImage.image
-//                let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
-//                let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
-//            }
-//        }
+        self.videoManager.stop()
     }
+    
     @IBOutlet var imageCapture: UIView!
     @IBOutlet weak var testImage: UIImageView!
     //MARK: Outlets in view
@@ -224,7 +263,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         
         self.view.backgroundColor = nil
         self.setupFilters()
-        
+        self.bridge.processType = 1;
+
         self.videoManager = VideoAnalgesic.sharedInstance
         self.videoManager.setCameraPosition(position: AVCaptureDevice.Position.front)
         
@@ -269,26 +309,25 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         // if no faces, just return original image
         if faces.count == 0 { return inputImage }
         
-        fGlobal = faces
+        self.fGlobal = faces
+        self.retImage = inputImage
         
-        var retImage = inputImage
-        
-        retImageGlobal = retImage
-        
-        self.bridge.processType = 1;
+        // used for applying filter to faces
         
         self.bridge.setTransforms(self.videoManager.transform)
-        print("NUMBER OF FACES:", faces.count)
-        print("FACES: ", faces)
-    
+        
         for (i,face) in faces.enumerated() {
             print(i, face)
-            self.bridge.setImage(retImage, withBounds: face.bounds, andContext: self.videoManager.getCIContext())
+            
+            let ciContext = CIContext()
+            
+            self.bridge.setImage(self.retImage, withBounds: face.bounds, andContext: self.videoManager.getCIContext())
+            
             self.bridge.processImage()
-            retImage = self.bridge.getImageComposite()
+            
+            self.retImage = self.bridge.getImageComposite()
         }
-        return retImage
-        
+        return self.retImage
     }
 
     
