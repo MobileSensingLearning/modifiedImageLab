@@ -30,7 +30,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     let pinchFilterIndex = 2
     
-    let SERVER_URL = "http://169.254.145.115 :8000"
+    let SERVER_URL = "http://169.254.145.115:8000"
     
     
     @IBOutlet weak var emojiButton1: EmojiButton!
@@ -189,16 +189,31 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 
                 
                 
-                if let colorPrediction = jsonDictionary["prediction"]{
-                    self.colorPrediction = colorPrediction
-                    print("Color response, ", self.colorPrediction)
-                }
+                //if let colorPrediction = jsonDictionary["prediction"] as String{
+                    //([u'light'])
+                let colorPrediction = jsonDictionary["prediction"] as! String
+                var newStr = ""
                 
-                if let emotionResponse = jsonDictionary["emotion"]{
-                    self.emotionPrediction = emotionResponse
-                    print("Emotion Response, ", self.emotionPrediction)
-
+                var index = colorPrediction.index(colorPrediction.startIndex, offsetBy: 0)
+                var i = 0
+                while(colorPrediction[index] != "]"){
+                    if(colorPrediction[index] == "[" || colorPrediction[index] == "'" /*|| colorPrediction[index] == "\""*/){}
+                    else {
+                        newStr += String(colorPrediction[index])
+                    }
+                    i += 1
+                    index = colorPrediction.index(colorPrediction.startIndex, offsetBy: i)
                 }
+                    newStr.remove(at: newStr.startIndex)
+
+                    self.colorPrediction = newStr
+                    
+                    print("Color response, ", self.colorPrediction)
+                //}
+                
+                let emotionResponse = jsonDictionary["emotion"] as! String
+                self.emotionPrediction = emotionResponse
+                print("Emotion Response, ", self.emotionPrediction)
                 
                 self.afterPrediction()
             }
@@ -213,9 +228,14 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
         for (i, emojiButton) in self.emojiButtons.enumerated() {
             let emoji = UIImage(named:"./Assets/custom_emojis/\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i)")
+            
             DispatchQueue.main.async {
+                emojiButton.setVals(emotion: self.emotionPrediction as! String)
+                emojiButton.backgroundColor = UIColor.red
                 emojiButton.setImage(emoji, for: .normal)
                 emojiButton.isHidden = false
+                print("emojibutton.isHidden: ", emojiButton.isHidden)
+                print("emojibutton.emotion: ", emojiButton.emotion)
             }
         }
     }
@@ -234,7 +254,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 let ciContext = CIContext()
                 let cgImage = ciContext.createCGImage(faceImage, from: faceImage.extent)
                 let uiImage = UIImage.init(cgImage: cgImage!)
-                let uiImageData:NSData = UIImagePNGRepresentation(uiImage)! as NSData
+                let uiImageData:NSData = uiImage.pngData()! as NSData
                 let strBase64 = uiImageData.base64EncodedString(options: .lineLength64Characters)
                 self.sendFeatures([self.base64string],withLabel:"Hi")
                 self.makeModel2()
@@ -248,7 +268,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                                             width: bounds.width/2, height: bounds.height/2))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
-        button.addTarget(self, action: #selector(buttonAction), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
         self.view.addSubview(button)
     }
     

@@ -16,13 +16,13 @@ class EmojiButton: UIButton {
         
         // set other operations after super.init, if required
         self.isHidden = false
+        print("showing myself")
     }
     
     required init?(coder aDecoder: NSCoder) {
         self.emotion = "Default"
-        super.init(frame: .zero)
-        self.setVals()
-       // super.init(coder: aDecoder)
+        //super.init()
+        super.init(coder: aDecoder)
     }
     
     @IBAction func pressed() {
