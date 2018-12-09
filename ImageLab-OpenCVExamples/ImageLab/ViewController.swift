@@ -30,7 +30,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     let pinchFilterIndex = 2
     
-    let SERVER_URL = "http://169.254.204.167:8000"
+    let SERVER_URL = "http://169.254.145.115:8000"
     
     
     @IBOutlet weak var emojiButton1: EmojiButton!
@@ -44,9 +44,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     @IBAction func reset(_ sender: Any) {
         self.videoManager.start()
     }
-    
-    
- 
     
     func makeModel2() {
         // create a GET request for server to update the ML model with current data
@@ -192,13 +189,16 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 
                 
                 
-                let colorPrediction = jsonDictionary["prediction"]!
-                self.colorPrediction = colorPrediction //as! String
-                print("Color response, ", self.colorPrediction)
+                if let colorPrediction = jsonDictionary["prediction"]{
+                    self.colorPrediction = colorPrediction
+                    print("Color response, ", self.colorPrediction)
+                }
                 
-                let emotionResponse = jsonDictionary["emotion"]!
-                self.emotionPrediction = emotionResponse
-                print("Emotion Response, ", self.emotionPrediction)
+                if let emotionResponse = jsonDictionary["emotion"]{
+                    self.emotionPrediction = emotionResponse
+                    print("Emotion Response, ", self.emotionPrediction)
+
+                }
                 
                 self.afterPrediction()
             }
@@ -212,7 +212,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         // set the buttons to corresponding emojis
     
         for (i, emojiButton) in self.emojiButtons.enumerated() {
-            let emoji = UIImage(named:"./Assets/custom_emojis/\(self.colorPrediction ?? "light")/\(self.emotionPrediction ?? "happiness")-\(i)")
+            let emoji = UIImage(named:"./Assets/custom_emojis/\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i)")
             DispatchQueue.main.async {
                 emojiButton.setImage(emoji, for: .normal)
                 emojiButton.isHidden = false
@@ -342,8 +342,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         
         for (i,face) in faces.enumerated() {
             print(i, face)
-            
-            let ciContext = CIContext()
             
             self.bridge.setImage(self.retImage, withBounds: face.bounds, andContext: self.videoManager.getCIContext())
             
