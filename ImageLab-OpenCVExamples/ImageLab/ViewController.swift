@@ -30,7 +30,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     let pinchFilterIndex = 2
     
-    let SERVER_URL = "http://169.254.145.115:8000"
+    let SERVER_URL = "http://169.254.145.115 :8000"
     
     
     @IBOutlet weak var emojiButton1: EmojiButton!
