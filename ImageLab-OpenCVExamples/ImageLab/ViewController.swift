@@ -225,14 +225,23 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     func afterPrediction() {
         // set the buttons to corresponding emojis
-    
+        
         for (i, emojiButton) in self.emojiButtons.enumerated() {
-            let emoji = UIImage(named:"./Assets/custom_emojis/\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i)")
+            //var emoji = UIImage(named:"angry-1")
+           // if(self.emotionPrediction as! String == "none"){
+            //    emoji = UIImage(named:"(self.colorPrediction!)/\(self.emotionPrediction!)") as UIImage?
+            //}  else {
+             //    emoji = UIImage(named:"(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)") as UIImage?
+            //}
             
+            let emoji = UIImage(named: "dark/happy-1") as UIImage?
+            print("emoji: ", emoji as Any)
+            print("type of emoji: ", type(of:emoji))
             DispatchQueue.main.async {
                 emojiButton.setVals(emotion: self.emotionPrediction as! String)
-                emojiButton.backgroundColor = UIColor.red
-                emojiButton.setImage(emoji, for: .normal)
+               // emojiButton.backgroundColor = UIColor.red
+                //emojiButton.setImage(emoji, for: .normal)
+                emojiButton.setBackgroundImage(emoji, for: .normal)
                 emojiButton.isHidden = false
                 print("emojibutton.isHidden: ", emojiButton.isHidden)
                 print("emojibutton.emotion: ", emojiButton.emotion)
@@ -256,8 +265,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 let uiImage = UIImage.init(cgImage: cgImage!)
                 let uiImageData:NSData = uiImage.pngData()! as NSData
                 let strBase64 = uiImageData.base64EncodedString(options: .lineLength64Characters)
-                self.sendFeatures([self.base64string],withLabel:"Hi")
-                self.makeModel2()
+               // self.sendFeatures([self.base64string],withLabel:"Hi")
+               // self.makeModel2()
                 self.getPrediction([strBase64])
             }
         }
