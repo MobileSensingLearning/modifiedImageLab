@@ -11,20 +11,42 @@ import AVFoundation
 class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate  {
     //MARK: Class Properties
     var base64string = String()
+    let operationQueue = OperationQueue()
+    
     var session = URLSession()
-    var globalPrediction: Any!
-    @IBOutlet weak var predictionImg: UIImageView!
+    
+    var colorPrediction: Any!
+    var emotionPrediction: Any!
+    var emojiButtons: [EmojiButton]!
+    
     var faceImages = [CIImage]()
     var filters : [CIFilter]! = nil
-    let operationQueue = OperationQueue()
-
-    var videoManager:VideoAnalgesic! = nil
-    let pinchFilterIndex = 2
     var detector:CIDetector! = nil
-    let bridge = OpenCVBridge()
-    var fGlobal:[CIFaceFeature] = [];
     var retImage:CIImage = CIImage()
-    let SERVER_URL = "http://169.254.127.209:8000"
+    var fGlobal:[CIFaceFeature] = [];
+    
+    let bridge = OpenCVBridge()
+    var videoManager:VideoAnalgesic! = nil
+    
+    let pinchFilterIndex = 2
+    
+    let SERVER_URL = "http://169.254.204.167:8000"
+    
+    
+    @IBOutlet weak var emojiButton1: EmojiButton!
+    @IBOutlet weak var emojiButton2: EmojiButton!
+    @IBOutlet weak var emojiButton3: EmojiButton!
+    @IBOutlet weak var emojiButton4: EmojiButton!
+    @IBOutlet weak var emojiButton5: EmojiButton!
+    
+    @IBOutlet weak var reset: UIButton!
+    @IBOutlet weak var predictionImg: UIImageView!
+    @IBAction func reset(_ sender: Any) {
+        self.videoManager.start()
+    }
+    
+    
+ 
     
     func makeModel2() {
         // create a GET request for server to update the ML model with current data
@@ -33,24 +55,22 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         
         let getUrl = URL(string: baseURL+query)
         let request: URLRequest = URLRequest(url: getUrl!)
-        let dataTask : URLSessionDataTask = self.session.dataTask(with: request,
-                                                                  completionHandler:{(data, response, error) in
-                                                                    // handle error!
-                                                                    if (error != nil) {
-                                                                        if let res = response{
-                                                                            print("Response:\n",res)
-                                                                        }
-                                                                    }
-                                                                    else{
-                                                                        let jsonDictionary = self.convertDataToDictionary(with: data)
-                                                                        
-                                                                        if let resubAcc = jsonDictionary["resubAccuracy"]{
-                                                                            print("Resubstitution Accuracy is", resubAcc)
-                                                                        }
-                                                                    }
+        let dataTask : URLSessionDataTask = self.session.dataTask(with: request, completionHandler:{(
+            data, response, error) in  // handle error!
+            if (error != nil) {
+                if let res = response{
+                    print("Response:\n",res)
+                }
+            }
+            else{
+                let jsonDictionary = self.convertDataToDictionary(with: data)
+                
+                if let resubAcc = jsonDictionary["resubAccuracy"]{
+                    print("Resubstitution Accuracy is", resubAcc)
+                }
+            }
                                                                     
         })
-        
         dataTask.resume() // start the task
     }
     
@@ -68,8 +88,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     func convertDataToDictionary(with data:Data?)->NSDictionary{
         do { // try to parse JSON and deal with errors using do/catch block
             let jsonDictionary: NSDictionary =
-                try JSONSerialization.jsonObject(with: data!,
-                                                 options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                try JSONSerialization.jsonObject(with: data!, options:
+                    JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
             
             return jsonDictionary
             
@@ -81,25 +101,25 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     func displayLabelResponse(_ response:String){
         
-        DispatchQueue.main.async {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                switch response {
-                case "[u'light']":
-                    self.predictionImg.image = (UIImage(named: "light_skin_tone.png"))
-                case "[u'medium light']":
-                    self.predictionImg.image = (UIImage(named: "medium_light_skin_tone.png"))
-                case "[u'medium']":
-                    self.predictionImg.image = (UIImage(named: "medium_skin_tone.png"))
-                case "[u'medium dark']":
-                    self.predictionImg.image = (UIImage(named: "medium_dark_skin_tone.png"))
-                case "[u'dark']":
-                    self.predictionImg.image = (UIImage(named: "dark_skin_tone.png"))
-                default:
-                    print("Unknown")
-                    break
-                }
-            })
-        }
+//        DispatchQueue.main.async {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+//                switch response {
+//                case "[u'light']":
+//                    self.predictionImg.image = (UIImage(named: "light_skin_tone.png"))
+//                case "[u'medium light']":
+//                    self.predictionImg.image = (UIImage(named: "medium_light_skin_tone.png"))
+//                case "[u'medium']":
+//                    self.predictionImg.image = (UIImage(named: "medium_skin_tone.png"))
+//                case "[u'medium dark']":
+//                    self.predictionImg.image = (UIImage(named: "medium_dark_skin_tone.png"))
+//                case "[u'dark']":
+//                    self.predictionImg.image = (UIImage(named: "dark_skin_tone.png"))
+//                default:
+//                    print("Unknown")
+//                    break
+//                }
+//            })
+//        }
     }
     
     func sendFeatures(_ array:[String], withLabel label:String){
@@ -113,27 +133,31 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         // data to send in body of post request (send arguments as json)
         let jsonUpload:NSDictionary = ["feature":[self.base64string],
                                        "label":"Hi",
-            "dsid":10,
+            "dsid":1,
             "modelName": 0]
         
         print(jsonUpload)
-        let requestBody:Data? = self.convertDictionaryToData(with:jsonUpload)
+        let requestBody:Data = self.convertDictionaryToData(with:jsonUpload)! // ? changed
         
         request.httpMethod = "POST"
         request.httpBody = requestBody
         
-        let postTask : URLSessionDataTask = self.session.dataTask(with: request,
-                                                                  completionHandler:{(data, response, error) in
-                                                                    if(error != nil){
-                                                                        if let res = response{
-                                                                            print("Response:\n",res)
-                                                                        }
-                                                                    }
-                                                                    else{
-                                                                        let jsonDictionary = self.convertDataToDictionary(with: data)
-                                                                        print(jsonDictionary["feature"]!)
-                                                                        print(jsonDictionary["label"]!)
-                                                                    }
+        let postTask : URLSessionDataTask = self.session.dataTask(with: request, completionHandler:
+        {(data, response, error) in
+            if(error != nil){
+                if let res = response{
+                    print("Response:\n",res)
+                }
+                
+            }
+            else{
+                let jsonDictionary = self.convertDataToDictionary(with: data)
+                print(jsonDictionary["feature"]!)
+                print(jsonDictionary["label"]!)
+                let colorResponse = jsonDictionary["prediction"]
+                
+                self.colorPrediction = colorResponse
+            }
                                                                     
         })
         
@@ -148,10 +172,10 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         var request = URLRequest(url: postUrl!)
         
         // data to send in body of post request (send arguments as json)
-        let jsonUpload:NSDictionary = ["feature":array, "dsid":10]
+        let jsonUpload:NSDictionary = ["feature":array, "dsid":1]
         
         
-        let requestBody:Data? = self.convertDictionaryToData(with:jsonUpload)
+        let requestBody:Data = self.convertDictionaryToData(with:jsonUpload)! // changed ?
         
         request.httpMethod = "POST"
         request.httpBody = requestBody
@@ -166,12 +190,17 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             else{
                 let jsonDictionary = self.convertDataToDictionary(with: data)
                 
-                let labelResponse = jsonDictionary["prediction"]!
-                print(labelResponse)
-                self.displayLabelResponse(labelResponse as! String)
-                self.globalPrediction = labelResponse
-                self.displayLabelResponse(labelResponse as! String)
                 
+                
+                let colorPrediction = jsonDictionary["prediction"]!
+                self.colorPrediction = colorPrediction //as! String
+                print("Color response, ", self.colorPrediction)
+                
+                let emotionResponse = jsonDictionary["emotion"]!
+                self.emotionPrediction = emotionResponse
+                print("Emotion Response, ", self.emotionPrediction)
+                
+                self.afterPrediction()
             }
                                                                     
         })
@@ -179,7 +208,17 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         postTask.resume() // start the task
     }
     
+    func afterPrediction() {
+        // set the buttons to corresponding emojis
     
+        for (i, emojiButton) in self.emojiButtons.enumerated() {
+            let emoji = UIImage(named:"./Assets/custom_emojis/\(self.colorPrediction ?? "light")/\(self.emotionPrediction ?? "happiness")-\(i)")
+            DispatchQueue.main.async {
+                emojiButton.setImage(emoji, for: .normal)
+                emojiButton.isHidden = false
+            }
+        }
+    }
     
     
     // this function should call the server
@@ -194,17 +233,12 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             DispatchQueue.main.async {
                 let ciContext = CIContext()
                 let cgImage = ciContext.createCGImage(faceImage, from: faceImage.extent)
-                self.testImage.image = UIImage.init(cgImage: cgImage!)
-                let copyImage = self.testImage.image
-                let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
-                let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
-                
-                
+                let uiImage = UIImage.init(cgImage: cgImage!)
+                let uiImageData:NSData = UIImagePNGRepresentation(uiImage)! as NSData
+                let strBase64 = uiImageData.base64EncodedString(options: .lineLength64Characters)
                 self.sendFeatures([self.base64string],withLabel:"Hi")
-            
-                self.getPrediction([strBase64])
-                
                 self.makeModel2()
+                self.getPrediction([strBase64])
             }
         }
     }
@@ -233,19 +267,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             
             if(faceImage != nil) {
                 print("face image is not null")
-                
-                DispatchQueue.main.async {
-                    let ciContext = CIContext()
-                    let cgImage = ciContext.createCGImage(faceImage!, from: faceImage!.extent)
-                    self.testImage.image = UIImage.init(cgImage: cgImage!)
-                    let copyImage = self.testImage.image
-                    let copyImageData:NSData = UIImagePNGRepresentation(copyImage!)! as NSData
-                    let strBase64 = copyImageData.base64EncodedString(options: .lineLength64Characters)
-                    print(strBase64)
-                }
+                self.faceImages.append(faceImage!)
             }
-            
-            self.faceImages.append(faceImage!)
         }
 
         self.videoManager.stop()
@@ -262,6 +285,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         super.viewDidLoad()
         
         self.view.backgroundColor = nil
+        self.emojiButtons = [emojiButton1, emojiButton2, emojiButton3, emojiButton4, emojiButton5]
         self.setupFilters()
         self.bridge.processType = 1;
 
