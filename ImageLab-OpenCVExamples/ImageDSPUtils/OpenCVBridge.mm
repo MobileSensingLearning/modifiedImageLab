@@ -38,21 +38,13 @@ using namespace cv;
     switch (self.processType) {
         case 1:
         {
-            vector<Mat> layers;
-            cvtColor(_image, image_copy, CV_BGRA2BGR);
-            cvtColor(image_copy, image_copy, CV_BGR2HSV);
+            char text[50];
+            Scalar avgPixelIntensity;
             
-            //grab  just the Hue chanel
-            cv::split(image_copy,layers);
-            
-            // shift the colors
-            cv::add(layers[0],80.0,layers[0]);
-            
-            // get back image from separated layers
-            cv::merge(layers,image_copy);
-            
-            cvtColor(image_copy, image_copy, CV_HSV2BGR);
-            cvtColor(image_copy, _image, CV_BGR2BGRA);
+            cvtColor(_image, image_copy, CV_BGRA2BGR); // get rid of alpha for processing
+            avgPixelIntensity = cv::mean( image_copy );
+            sprintf(text,"Face captured");
+            cv::putText(_image, text, cv::Point(0, 10), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
             break;
         }
         default:

@@ -30,7 +30,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     let pinchFilterIndex = 2
     
-    let SERVER_URL = "http://169.254.145.115:8000"
+    let SERVER_URL = "http://169.254.122.165:8000"
     
     
     @IBOutlet weak var emojiButton1: EmojiButton!
@@ -41,6 +41,13 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     @IBOutlet weak var reset: UIButton!
     @IBOutlet weak var predictionImg: UIImageView!
+    
+    @IBOutlet weak var emojiPressed: EmojiButton!
+    
+    @IBAction func emojiPressed(_ sender: EmojiButton) {
+        sender.pressed()
+    }
+    
     @IBAction func reset(_ sender: Any) {
         self.videoManager.start()
     }
@@ -227,14 +234,19 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         // set the buttons to corresponding emojis
         
         for (i, emojiButton) in self.emojiButtons.enumerated() {
-            //var emoji = UIImage(named:"angry-1")
-           // if(self.emotionPrediction as! String == "none"){
-            //    emoji = UIImage(named:"(self.colorPrediction!)/\(self.emotionPrediction!)") as UIImage?
-            //}  else {
-             //    emoji = UIImage(named:"(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)") as UIImage?
-            //}
+            var emoji = UIImage(named:"angry-1")
+            var str=""
+            if(self.emotionPrediction as! String == "none"){
+                str = "\(self.colorPrediction!)/\(self.emotionPrediction!)"
+                print("str: ", str)
+                emoji = UIImage(named:str) as UIImage?
+            }  else {
+                str = "\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)"
+                print("str: ", str)
+                 emoji = UIImage(named:str) as UIImage?
+            }
             
-            let emoji = UIImage(named: "dark/happy-1") as UIImage?
+          //  let emoji = UIImage(named: "dark/happy-1") as UIImage?
             print("emoji: ", emoji as Any)
             print("type of emoji: ", type(of:emoji))
             DispatchQueue.main.async {
@@ -274,7 +286,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     func makeButtons(i:Int, bounds:CGRect) {
         let button = UIButton(frame: CGRect(x: bounds.minX, y: bounds.minY,
-                                            width: bounds.width/2, height: bounds.height/2))
+                                            width: 30, height: 30))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
