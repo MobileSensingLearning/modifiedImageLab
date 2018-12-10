@@ -27,7 +27,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     let bridge = OpenCVBridge()
     var videoManager:VideoAnalgesic! = nil
     
-    let SERVER_URL = "http://169.254.148.164:8000"
+    let SERVER_URL = "http://169.254.123.46:8000"
     
     
     @IBOutlet weak var copyLabel: UILabel!
@@ -211,8 +211,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             self.copyLabel.isHidden = false
         }
         for (i, emojiButton) in self.emojiButtons.enumerated() {
-            var emoji = UIImage(named:"angry-1")
-            var str=""
+            var emoji = UIImage(named:"dark/angry-1")
+            /*var str=""
             if(self.emotionPrediction as! String == "none"){
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)"
                 print("str: ", str)
@@ -221,16 +221,20 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)"
                 print("str: ", str)
                  emoji = UIImage(named:str) as UIImage?
-            }
+            } */
             
           //  let emoji = UIImage(named: "dark/happy-1") as UIImage?
             print("emoji: ", emoji as Any)
             print("type of emoji: ", type(of:emoji))
             DispatchQueue.main.async {
                 emojiButton.setVals(emotion: self.emotionPrediction as! String)
-               // emojiButton.backgroundColor = UIColor.red
-                //emojiButton.setImage(emoji, for: .normal)
-                emojiButton.setBackgroundImage(emoji, for: .normal)
+                emojiButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
+                emojiButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+                emojiButton.setImage(emoji, for: .normal)
+                
+                
+                emojiButton.setImage(emoji, for: .normal)
+              //  emojiButton.setBackgroundImage(emoji, for: .normal)
                 emojiButton.isHidden = false
                 print("emojibutton.isHidden: ", emojiButton.isHidden)
                 print("emojibutton.emotion: ", emojiButton.emotion)
@@ -262,9 +266,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     }
     // here
     func makeButtons(i:Int, face:CIFaceFeature) {
-        let height = face.bounds.height
-        let width = face.bounds.width
-
         print("mouthPosition: ", face.mouthPosition)
         let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY,
                                             width: 50, height: 50))

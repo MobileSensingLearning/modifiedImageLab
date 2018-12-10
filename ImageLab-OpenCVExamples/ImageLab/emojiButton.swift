@@ -26,8 +26,7 @@ class EmojiButton: UIButton {
     }
     
     @IBAction func pressed() {
-        // UIPasteboard.general.image = self.image(for: .normal)
-        UIPasteboard.general.image = self.backgroundImage(for: .normal)
+         UIPasteboard.general.image = self.image(for: .normal)
     }
 }
 
