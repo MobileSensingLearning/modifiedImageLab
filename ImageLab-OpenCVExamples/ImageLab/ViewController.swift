@@ -267,7 +267,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
 
         print("mouthPosition: ", face.mouthPosition)
         let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY,
-                                            width: 25, height: 25))
+                                            width: 50, height: 50))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
