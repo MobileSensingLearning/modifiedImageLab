@@ -82,13 +82,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="73b-K2-EJG">
-                                <rect key="frame" x="312" y="590" width="39" height="30"/>
-                                <state key="normal" title="Reset"/>
-                                <connections>
-                                    <action selector="reset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zNE-Ai-Olh"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qh2-VX-wZA">
                                 <rect key="frame" x="88" y="538" width="200" height="48"/>
                                 <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -117,8 +110,6 @@
                             <constraint firstItem="pwV-iZ-MM4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="24" id="k87-4c-uf3"/>
                             <constraint firstItem="EVb-27-rRz" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="o64-lj-XRH"/>
                             <constraint firstItem="F1f-IV-wgp" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="17" id="oKZ-Av-gPg"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="73b-K2-EJG" secondAttribute="bottom" constant="47" id="pfR-jH-Dqt"/>
-                            <constraint firstItem="73b-K2-EJG" firstAttribute="leading" secondItem="qh2-VX-wZA" secondAttribute="trailing" constant="24" id="tpl-Qd-5o5"/>
                             <constraint firstItem="nQh-Cw-hKm" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="uLS-8B-LQr"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="qh2-VX-wZA" secondAttribute="bottom" constant="81" id="xeA-X4-cSm"/>
                         </constraints>
@@ -135,7 +126,6 @@
                         <outlet property="emojiButton4" destination="EVb-27-rRz" id="GtP-dl-Iec"/>
                         <outlet property="emojiButton5" destination="8ID-Ty-AnR" id="Yiw-qJ-vaD"/>
                         <outlet property="imageCapture" destination="8bC-Xf-vdC" id="gYE-Wf-0TD"/>
-                        <outlet property="reset" destination="73b-K2-EJG" id="jx4-l7-1e1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
