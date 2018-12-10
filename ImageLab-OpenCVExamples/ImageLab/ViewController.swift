@@ -329,7 +329,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     //MARK: ViewController Hierarchy
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.view.backgroundColor = nil
         self.emojiButtons = [emojiButton1, emojiButton2, emojiButton3, emojiButton4, emojiButton5]
         self.bridge.processType = 1;
@@ -404,6 +404,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         return self.detector.features(in: img, options: optsFace) as! [CIFaceFeature]
         
     }
+
     
 
 }
