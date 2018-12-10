@@ -18,6 +18,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     var colorPrediction: Any!
     var emotionPrediction: Any!
     var emojiButtons: [EmojiButton]!
+    var greenButtons: [UIButton] = []
     
     var faceImages = [CIImage]()
     var detector:CIDetector! = nil
@@ -47,7 +48,19 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     }
     
     @IBAction func reset(_ sender: Any) {
+        
+        for button in self.greenButtons {
+            button.removeFromSuperview()
+        }
+        
+        for emojiButton in self.emojiButtons{
+            emojiButton.setImage(nil, for: .normal)
+        }
+        
+        self.copyLabel.isHidden = true
+        
         self.videoManager.start()
+        
     }
     
     func makeModel2() {
@@ -212,7 +225,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         }
         for (i, emojiButton) in self.emojiButtons.enumerated() {
             var emoji = UIImage(named:"dark/angry-1")
-            /*var str=""
+            var str=""
             if(self.emotionPrediction as! String == "none"){
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)"
                 print("str: ", str)
@@ -221,7 +234,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)"
                 print("str: ", str)
                  emoji = UIImage(named:str) as UIImage?
-            } */
+            }
             
           //  let emoji = UIImage(named: "dark/happy-1") as UIImage?
             print("emoji: ", emoji as Any)
@@ -267,12 +280,12 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     // here
     func makeButtons(i:Int, face:CIFaceFeature) {
         print("mouthPosition: ", face.mouthPosition)
-        let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY,
-                                            width: 50, height: 50))
+        let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY, width: 50, height: 50))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
         self.view.addSubview(button)
+        self.greenButtons.append(button)
     }
     
     // this function should stop the videoManager
