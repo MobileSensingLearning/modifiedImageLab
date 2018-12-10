@@ -20,7 +20,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     var emojiButtons: [EmojiButton]!
     
     var faceImages = [CIImage]()
-    var filters : [CIFilter]! = nil
     var detector:CIDetector! = nil
     var retImage:CIImage = CIImage()
     var fGlobal:[CIFaceFeature] = [];
@@ -28,7 +27,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     let bridge = OpenCVBridge()
     var videoManager:VideoAnalgesic! = nil
     
-    let SERVER_URL = "http://169.254.66.136:8000"
+    let SERVER_URL = "http://169.254.148.164:8000"
     
     
     @IBOutlet weak var copyLabel: UILabel!
@@ -230,8 +229,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             DispatchQueue.main.async {
                 emojiButton.setVals(emotion: self.emotionPrediction as! String)
                // emojiButton.backgroundColor = UIColor.red
-                emojiButton.setImage(emoji, for: .normal)
-                //emojiButton.setBackgroundImage(emoji, for: .normal)
+                //emojiButton.setImage(emoji, for: .normal)
+                emojiButton.setBackgroundImage(emoji, for: .normal)
                 emojiButton.isHidden = false
                 print("emojibutton.isHidden: ", emojiButton.isHidden)
                 print("emojibutton.emotion: ", emojiButton.emotion)
@@ -268,7 +267,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
 
         print("mouthPosition: ", face.mouthPosition)
         let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY,
-                                            width: width, height: height))
+                                            width: 25, height: 25))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
@@ -309,7 +308,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         
         self.view.backgroundColor = nil
         self.emojiButtons = [emojiButton1, emojiButton2, emojiButton3, emojiButton4, emojiButton5]
-        self.setupFilters()
         self.bridge.processType = 1;
 
         self.videoManager = VideoAnalgesic.sharedInstance
@@ -374,40 +372,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         }
         return self.retImage
     }
-
-    
-    //MARK: Setup filtering
-    func setupFilters(){
-        filters = []
-        
-        let filterPinch = CIFilter(name:"CIBumpDistortion")!
-        filterPinch.setValue(-0.5, forKey: "inputScale")
-        filterPinch.setValue(75, forKey: "inputRadius")
-        filters.append(filterPinch)
-        
-    }
-    
-    //MARK: Apply filters and apply feature detectors
-    func applyFiltersToFaces(inputImage:CIImage,features:[CIFaceFeature])->CIImage{
-        var retImage = inputImage
-        var filterCenter = CGPoint()
-//        globalFeatures = features
-       
-        for f in features {
-            //set where to apply filter
-            filterCenter.x = f.bounds.midX
-            filterCenter.y = f.bounds.midY
-            
-            //do for each filter (assumes all filters have property, "inputCenter")
-            for filt in filters{
-                filt.setValue(retImage, forKey: kCIInputImageKey)
-                filt.setValue(CIVector(cgPoint: filterCenter), forKey: "inputCenter")
-                // could also manipualte the radius of the filter based on face size!
-                retImage = filt.outputImage!
-            }
-        }
-        return retImage
-    }
     
     func getFaces(img:CIImage) -> [CIFaceFeature]{
         // this ungodly mess makes sure the image is the correct orientation
@@ -417,24 +381,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         
     }
     
-    @IBAction func swipeRecognized(_ sender: UISwipeGestureRecognizer) {
-        stageLabel.text = "Stage: \(self.bridge.processType)"
-
-    }
-    
-    //MARK: Convenience Methods for UI Flash and Camera Toggle
-    @IBAction func flash(_ sender: AnyObject) {
-        if(self.videoManager.toggleFlash()){
-            self.flashSlider.value = 1.0
-        }
-        else{
-            self.flashSlider.value = 0.0
-        }
-    }
-    
-    @IBAction func switchCamera(_ sender: AnyObject) {
-        self.videoManager.toggleCameraPosition()
-    }
 
 }
 
