@@ -21,56 +21,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwV-iZ-MM4" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
-                                <rect key="frame" x="24" y="90" width="25" height="25"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="1">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1uY-iB-fEv"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVb-27-rRz" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
-                                <rect key="frame" x="163" y="90" width="25" height="25"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="4">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4yH-q3-SGd"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0aN-nE-Hpq" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
-                                <rect key="frame" x="301" y="90" width="25" height="25"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="3">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TbB-Wy-PaG"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQh-Cw-hKm" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
-                                <rect key="frame" x="96" y="90" width="25" height="25"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="2">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WPI-R7-Kay"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ID-Ty-AnR" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
-                                <rect key="frame" x="235" y="90" width="25" height="25"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="5">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s4H-Ux-nUK"/>
-                                </connections>
-                            </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click emoji to copy it" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F1f-IV-wgp">
                                 <rect key="frame" x="24" y="37" width="169" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -95,26 +45,107 @@
                                     <action selector="actuallyCapture:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sj6-xx-wtW"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pwV-iZ-MM4" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
+                                <rect key="frame" x="36" y="66" width="45" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="45" id="CkS-Ud-Y8L"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="D8j-Vx-QjW"/>
+                                    <constraint firstAttribute="height" constant="45" id="wmW-OA-31S"/>
+                                </constraints>
+                                <state key="normal" title="1">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1uY-iB-fEv"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVb-27-rRz" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
+                                <rect key="frame" x="167" y="66" width="45" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="619-4j-sZz"/>
+                                    <constraint firstAttribute="width" constant="45" id="R8o-4P-MUw"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="i4L-Eg-0LQ"/>
+                                </constraints>
+                                <state key="normal" title="4">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4yH-q3-SGd"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0aN-nE-Hpq" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
+                                <rect key="frame" x="295" y="66" width="45" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Wkb-uE-DUj"/>
+                                    <constraint firstAttribute="width" constant="45" id="end-MN-7KN"/>
+                                </constraints>
+                                <state key="normal" title="3">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TbB-Wy-PaG"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nQh-Cw-hKm" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
+                                <rect key="frame" x="100" y="66" width="45" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="mLe-Ac-s3a"/>
+                                    <constraint firstAttribute="width" constant="45" id="mpH-Iu-oTs"/>
+                                    <constraint firstAttribute="height" constant="45" id="n7R-73-L0D"/>
+                                </constraints>
+                                <state key="normal" title="2">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WPI-R7-Kay"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ID-Ty-AnR" customClass="EmojiButton" customModule="ImageLab" customModuleProvider="target">
+                                <rect key="frame" x="231" y="66" width="45" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="45" id="Qep-vQ-lQx"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="fJA-4H-CGi"/>
+                                    <constraint firstAttribute="height" constant="45" id="l7t-Wu-i2c"/>
+                                </constraints>
+                                <state key="normal" title="5">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emojiPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s4H-Ux-nUK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="nQh-Cw-hKm" firstAttribute="leading" secondItem="pwV-iZ-MM4" secondAttribute="trailing" constant="47" id="5fy-XX-RHZ"/>
-                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="5vP-vM-bQI"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pwV-iZ-MM4" secondAttribute="bottom" constant="556" id="1TX-yx-PLN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0aN-nE-Hpq" secondAttribute="trailing" constant="19" id="3Ax-7z-60j"/>
+                            <constraint firstItem="EVb-27-rRz" firstAttribute="top" secondItem="8ID-Ty-AnR" secondAttribute="top" id="4g7-SW-Z90"/>
                             <constraint firstItem="qh2-VX-wZA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="88" id="9rR-jW-kwh"/>
-                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="IQG-0Y-3a9"/>
-                            <constraint firstItem="0aN-nE-Hpq" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="IYQ-wS-Bbe"/>
-                            <constraint firstAttribute="trailing" secondItem="0aN-nE-Hpq" secondAttribute="trailing" constant="49" id="NES-wv-vMz"/>
+                            <constraint firstItem="EVb-27-rRz" firstAttribute="leading" secondItem="nQh-Cw-hKm" secondAttribute="trailing" constant="22" id="AyC-o3-dfT"/>
+                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="baseline" secondItem="0aN-nE-Hpq" secondAttribute="firstBaseline" id="DVq-I7-zE4"/>
+                            <constraint firstItem="0aN-nE-Hpq" firstAttribute="leading" secondItem="8ID-Ty-AnR" secondAttribute="trailing" constant="19" id="EZc-qH-47u"/>
+                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="baseline" secondItem="nQh-Cw-hKm" secondAttribute="firstBaseline" id="Hrq-zs-nD9"/>
+                            <constraint firstItem="nQh-Cw-hKm" firstAttribute="baseline" secondItem="EVb-27-rRz" secondAttribute="baseline" id="IX4-nq-9Vj"/>
                             <constraint firstItem="F1f-IV-wgp" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="24" id="NqD-ft-FXW"/>
-                            <constraint firstItem="EVb-27-rRz" firstAttribute="leading" secondItem="nQh-Cw-hKm" secondAttribute="trailing" constant="42" id="O2j-ut-Ceu"/>
+                            <constraint firstItem="EVb-27-rRz" firstAttribute="baseline" secondItem="8ID-Ty-AnR" secondAttribute="firstBaseline" id="cCn-FA-mzX"/>
+                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="8" symbolic="YES" id="d0a-vY-rBg"/>
+                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="baseline" secondItem="EVb-27-rRz" secondAttribute="firstBaseline" id="dDS-y2-SHg"/>
+                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="top" secondItem="0aN-nE-Hpq" secondAttribute="top" id="fe2-t3-I0F"/>
                             <constraint firstAttribute="trailing" secondItem="qh2-VX-wZA" secondAttribute="trailing" constant="87" id="i8s-tM-Fu8"/>
-                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="leading" secondItem="EVb-27-rRz" secondAttribute="trailing" constant="47" id="icD-N8-wtO"/>
-                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="24" id="k87-4c-uf3"/>
-                            <constraint firstItem="EVb-27-rRz" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="o64-lj-XRH"/>
+                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="liN-Hu-tXp"/>
+                            <constraint firstItem="nQh-Cw-hKm" firstAttribute="top" secondItem="EVb-27-rRz" secondAttribute="top" id="mPg-Ea-9F9"/>
+                            <constraint firstItem="pwV-iZ-MM4" firstAttribute="top" secondItem="nQh-Cw-hKm" secondAttribute="top" id="mhG-n2-iNe"/>
                             <constraint firstItem="F1f-IV-wgp" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="17" id="oKZ-Av-gPg"/>
+                            <constraint firstItem="nQh-Cw-hKm" firstAttribute="leading" secondItem="pwV-iZ-MM4" secondAttribute="trailing" constant="19" id="obw-e6-vDt"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="73b-K2-EJG" secondAttribute="bottom" constant="47" id="pfR-jH-Dqt"/>
                             <constraint firstItem="73b-K2-EJG" firstAttribute="leading" secondItem="qh2-VX-wZA" secondAttribute="trailing" constant="24" id="tpl-Qd-5o5"/>
-                            <constraint firstItem="nQh-Cw-hKm" firstAttribute="top" secondItem="F1f-IV-wgp" secondAttribute="bottom" constant="32" id="uLS-8B-LQr"/>
+                            <constraint firstItem="8ID-Ty-AnR" firstAttribute="leading" secondItem="EVb-27-rRz" secondAttribute="trailing" constant="19" id="xPY-8A-grL"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="qh2-VX-wZA" secondAttribute="bottom" constant="81" id="xeA-X4-cSm"/>
                         </constraints>
                         <connections>

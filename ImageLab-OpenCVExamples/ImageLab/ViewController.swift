@@ -28,7 +28,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     let bridge = OpenCVBridge()
     var videoManager:VideoAnalgesic! = nil
     
-    let SERVER_URL = "http://169.254.123.46:8000"
+    let SERVER_URL = "http://169.254.156.29:8000"
     
     
     @IBOutlet weak var copyLabel: UILabel!
@@ -49,18 +49,26 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     @IBAction func reset(_ sender: Any) {
         
+        self.faceImages.removeAll()
+        
         for button in self.greenButtons {
             button.removeFromSuperview()
         }
+        
+        self.greenButtons.removeAll()
         
         for emojiButton in self.emojiButtons{
             emojiButton.setImage(nil, for: .normal)
         }
         
+        
         self.copyLabel.isHidden = true
-        
+        self.emotionPrediction = ""
+        self.colorPrediction = ""
+
         self.videoManager.start()
-        
+      
+
     }
     
     func makeModel2() {
@@ -128,7 +136,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             "dsid":1,
             "modelName": 0]
         
-        print(jsonUpload)
+       // print(jsonUpload)
         let requestBody:Data = self.convertDictionaryToData(with:jsonUpload)! // ? changed
         
         request.httpMethod = "POST"
@@ -144,8 +152,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             }
             else{
                 let jsonDictionary = self.convertDataToDictionary(with: data)
-                print(jsonDictionary["feature"]!)
-                print(jsonDictionary["label"]!)
+          //      print(jsonDictionary["feature"]!)
+            //    print(jsonDictionary["label"]!)
                 let colorResponse = jsonDictionary["prediction"]
                 
                 self.colorPrediction = colorResponse
@@ -157,6 +165,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     }
     
     func getPrediction(_ array:[String]){
+       // print("CALLING PREDICTION")
         let baseURL = "\(SERVER_URL)/PredictOne"
         let postUrl = URL(string: "\(baseURL)")
         
@@ -187,6 +196,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 //if let colorPrediction = jsonDictionary["prediction"] as String{
                     //([u'light'])
                 let colorPrediction = jsonDictionary["prediction"] as! String
+           //     print("colorPrediction: ", colorPrediction)
                 var newStr = ""
                 
                 var index = colorPrediction.index(colorPrediction.startIndex, offsetBy: 0)
@@ -203,12 +213,14 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
 
                     self.colorPrediction = newStr
                     
-                    print("Color response, ", self.colorPrediction)
+                 //   print("Color response, ", self.colorPrediction)
                 //}
                 
                 let emotionResponse = jsonDictionary["emotion"] as! String
+             //   print("Emotion response, ", emotionResponse)
+
                 self.emotionPrediction = emotionResponse
-                print("Emotion Response, ", self.emotionPrediction)
+             //   print("Emotion Response, ", self.emotionPrediction)
                 
                 self.afterPrediction()
             }
@@ -228,29 +240,27 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             var str=""
             if(self.emotionPrediction as! String == "none"){
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)"
-                print("str: ", str)
+            //    print("str: ", str)
                 emoji = UIImage(named:str) as UIImage?
             }  else {
                 str = "\(self.colorPrediction!)/\(self.emotionPrediction!)-\(i+1)"
-                print("str: ", str)
+              //  print("str: ", str)
                  emoji = UIImage(named:str) as UIImage?
             }
             
           //  let emoji = UIImage(named: "dark/happy-1") as UIImage?
-            print("emoji: ", emoji as Any)
-            print("type of emoji: ", type(of:emoji))
+          //  print("emoji: ", emoji as Any)
+           // print("type of emoji: ", type(of:emoji))
             DispatchQueue.main.async {
                 emojiButton.setVals(emotion: self.emotionPrediction as! String)
-                emojiButton.widthAnchor.constraint(equalToConstant: 50.0).isActive = true
-                emojiButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
                 emojiButton.setImage(emoji, for: .normal)
                 
                 
                 emojiButton.setImage(emoji, for: .normal)
               //  emojiButton.setBackgroundImage(emoji, for: .normal)
                 emojiButton.isHidden = false
-                print("emojibutton.isHidden: ", emojiButton.isHidden)
-                print("emojibutton.emotion: ", emojiButton.emotion)
+          //      print("emojibutton.isHidden: ", emojiButton.isHidden)
+            //    print("emojibutton.emotion: ", emojiButton.emotion)
             }
         }
     }
@@ -260,11 +270,11 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     // and get an emotion & skin tone prediction
     @objc func  buttonAction(sender: UIButton!) {
         
-        print("title:", sender.currentTitle!)
+      //  print("title:", sender.currentTitle!)
         let i = Int(sender.currentTitle!)
         let faceImage = self.faceImages[i ?? 0];
         if(faceImage != nil) {
-            print("face image is not null")
+            //print("face image is not null")
             DispatchQueue.main.async {
                 let ciContext = CIContext()
                 let cgImage = ciContext.createCGImage(faceImage, from: faceImage.extent)
@@ -279,7 +289,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     }
     // here
     func makeButtons(i:Int, face:CIFaceFeature) {
-        print("mouthPosition: ", face.mouthPosition)
+       // print("mouthPosition: ", face.mouthPosition)
         let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY, width: 50, height: 50))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
@@ -302,7 +312,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
                 andContext: self.videoManager.getCIContext())
             
             if(faceImage != nil) {
-                print("face image is not null")
+               // print("face image is not null")
                 self.faceImages.append(faceImage!)
             }
         }

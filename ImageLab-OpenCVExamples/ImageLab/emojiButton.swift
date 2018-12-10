@@ -16,7 +16,7 @@ class EmojiButton: UIButton {
         
         // set other operations after super.init, if required
         self.isHidden = false
-        print("showing myself")
+        //print("showing myself")
     }
     
     required init?(coder aDecoder: NSCoder) {

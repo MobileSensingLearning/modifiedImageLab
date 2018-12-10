@@ -30,7 +30,7 @@ using namespace cv;
 
 #pragma mark Define Custom Functions Here
 -(void)processImage{
-    printf("%ld", (long)self.processType);
+   // printf("%ld", (long)self.processType);
     cv::Mat frame_gray,image_copy;
     const int kCannyLowThreshold = 300;
     const int kFilterKernelSize = 5;
@@ -162,7 +162,7 @@ using namespace cv;
                                         8 * _image.elemSize(),                           // Bits per pixel
                                         _image.step[0],                                  // Bytes per row
                                         colorSpace,                                     // Colorspace
-                                        kCGImageAlphaNone | kCGBitmapByteOrderDefault,  // Bitmap info flags
+                                        kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault,  // Bitmap info flags
                                         provider,                                       // CGDataProviderRef
                                         NULL,                                           // Decode
                                         false,                                          // Should interpolate
@@ -206,7 +206,7 @@ using namespace cv;
                                         8 * _image.elemSize(),                           // Bits per pixel
                                         _image.step[0],                                  // Bytes per row
                                         colorSpace,                                     // Colorspace
-                                        kCGImageAlphaNone | kCGBitmapByteOrderDefault,  // Bitmap info flags
+                                        kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault,  // Bitmap info flags
                                         provider,                                       // CGDataProviderRef
                                         NULL,                                           // Decode
                                         false,                                          // Should interpolate
