@@ -28,11 +28,10 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     let bridge = OpenCVBridge()
     var videoManager:VideoAnalgesic! = nil
     
-    let pinchFilterIndex = 2
-    
-    let SERVER_URL = "http://169.254.122.165:8000"
+    let SERVER_URL = "http://169.254.66.136:8000"
     
     
+    @IBOutlet weak var copyLabel: UILabel!
     @IBOutlet weak var emojiButton1: EmojiButton!
     @IBOutlet weak var emojiButton2: EmojiButton!
     @IBOutlet weak var emojiButton3: EmojiButton!
@@ -101,29 +100,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             print("json error: \(error.localizedDescription)")
             return NSDictionary() // just return empty
         }
-    }
-    
-    func displayLabelResponse(_ response:String){
-        
-//        DispatchQueue.main.async {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-//                switch response {
-//                case "[u'light']":
-//                    self.predictionImg.image = (UIImage(named: "light_skin_tone.png"))
-//                case "[u'medium light']":
-//                    self.predictionImg.image = (UIImage(named: "medium_light_skin_tone.png"))
-//                case "[u'medium']":
-//                    self.predictionImg.image = (UIImage(named: "medium_skin_tone.png"))
-//                case "[u'medium dark']":
-//                    self.predictionImg.image = (UIImage(named: "medium_dark_skin_tone.png"))
-//                case "[u'dark']":
-//                    self.predictionImg.image = (UIImage(named: "dark_skin_tone.png"))
-//                default:
-//                    print("Unknown")
-//                    break
-//                }
-//            })
-//        }
     }
     
     func sendFeatures(_ array:[String], withLabel label:String){
@@ -232,7 +208,9 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     
     func afterPrediction() {
         // set the buttons to corresponding emojis
-        
+        DispatchQueue.main.async {
+            self.copyLabel.isHidden = false
+        }
         for (i, emojiButton) in self.emojiButtons.enumerated() {
             var emoji = UIImage(named:"angry-1")
             var str=""
@@ -252,8 +230,8 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             DispatchQueue.main.async {
                 emojiButton.setVals(emotion: self.emotionPrediction as! String)
                // emojiButton.backgroundColor = UIColor.red
-                //emojiButton.setImage(emoji, for: .normal)
-                emojiButton.setBackgroundImage(emoji, for: .normal)
+                emojiButton.setImage(emoji, for: .normal)
+                //emojiButton.setBackgroundImage(emoji, for: .normal)
                 emojiButton.isHidden = false
                 print("emojibutton.isHidden: ", emojiButton.isHidden)
                 print("emojibutton.emotion: ", emojiButton.emotion)
@@ -283,10 +261,14 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
             }
         }
     }
-    
-    func makeButtons(i:Int, bounds:CGRect) {
-        let button = UIButton(frame: CGRect(x: bounds.minX, y: bounds.minY,
-                                            width: 30, height: 30))
+    // here
+    func makeButtons(i:Int, face:CIFaceFeature) {
+        let height = face.bounds.height
+        let width = face.bounds.width
+
+        print("mouthPosition: ", face.mouthPosition)
+        let button = UIButton(frame: CGRect(x: face.bounds.midX/2, y: face.bounds.maxY,
+                                            width: width, height: height))
         button.backgroundColor = .green
         button.setTitle(String(i), for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: UIControl.Event.touchUpInside)
@@ -300,7 +282,7 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
         self.bridge.setTransforms(self.videoManager.transform)
         for (i, face) in self.fGlobal.enumerated() {
 
-            makeButtons(i: i, bounds: face.bounds);
+            makeButtons(i: i, face: face);
 
             // Making photo appear in box
             let faceImage = self.bridge.capture(self.retImage, withBounds: face.bounds, // the first face bounds
@@ -453,16 +435,6 @@ class ViewController: UIViewController, URLSessionDelegate, UITextFieldDelegate 
     @IBAction func switchCamera(_ sender: AnyObject) {
         self.videoManager.toggleCameraPosition()
     }
-    
 
-    
-//    @IBAction func setFlashLevel(_ sender: UISlider) {
-//        if(sender.value>0.0){
-//            self.videoManager.turnOnFlashwithLevel(sender.value)
-//        }
-//        else if(sender.value==0.0){
-//            self.videoManager.turnOffFlash()
-//        }
-//    }
 }
 
